@@ -114,4 +114,25 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::put('/medicines/images/{image}', [\App\Http\Controllers\MedicineImageController::class, 'update']);
     Route::patch('/medicines/images/{image}/primary', [\App\Http\Controllers\MedicineImageController::class, 'setPrimary']);
     Route::delete('/medicines/images/{image}', [\App\Http\Controllers\MedicineImageController::class, 'destroy']);
+    // Customers
+    Route::get('/customers', [\App\Http\Controllers\Api\CustomerController::class, 'index']);
+    Route::post('/customers', [\App\Http\Controllers\Api\CustomerController::class, 'store']);
+    Route::get('/customers/{id}', [\App\Http\Controllers\Api\CustomerController::class, 'show']);
+    Route::put('/customers/{id}', [\App\Http\Controllers\Api\CustomerController::class, 'update']);
+    Route::patch('/customers/{id}/status', [\App\Http\Controllers\Api\CustomerController::class, 'updateStatus']);
+    Route::delete('/customers/{id}', [\App\Http\Controllers\Api\CustomerController::class, 'destroy']);
+
+    // Customer Addresses
+    Route::get('/customers/{id}/addresses', [\App\Http\Controllers\Api\CustomerAddressController::class, 'index']);
+    Route::post('/customers/{id}/addresses', [\App\Http\Controllers\Api\CustomerAddressController::class, 'store']);
+    Route::put('/customer-addresses/{id}', [\App\Http\Controllers\Api\CustomerAddressController::class, 'update']);
+    Route::delete('/customer-addresses/{id}', [\App\Http\Controllers\Api\CustomerAddressController::class, 'destroy']);
+
+    // Cart
+    Route::get('/cart', [\App\Http\Controllers\Api\CartController::class, 'index']);
+    Route::post('/cart/items', [\App\Http\Controllers\Api\CartController::class, 'store']);
+    Route::put('/cart/items/{id}', [\App\Http\Controllers\Api\CartController::class, 'update']);
+    Route::delete('/cart/items/{id}', [\App\Http\Controllers\Api\CartController::class, 'destroy']);
+    Route::delete('/cart', [\App\Http\Controllers\Api\CartController::class, 'clear']);
+    Route::get('/cart/summary', [\App\Http\Controllers\Api\CartController::class, 'summary']);
 });
