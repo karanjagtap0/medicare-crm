@@ -65,4 +65,12 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::put('/uoms/{id}', [\App\Http\Controllers\Master\UomController::class, 'update']);
     Route::patch('/uoms/{id}/status', [\App\Http\Controllers\Master\UomController::class, 'updateStatus']);
     Route::delete('/uoms/{id}', [\App\Http\Controllers\Master\UomController::class, 'destroy']);
+
+    // Medicines (Not in Master)
+    Route::get('/medicines', [\App\Http\Controllers\MedicineController::class, 'index']);
+    Route::post('/medicines', [\App\Http\Controllers\MedicineController::class, 'store']);
+    Route::get('/medicines/{id}', [\App\Http\Controllers\MedicineController::class, 'show']);
+    Route::put('/medicines/{id}', [\App\Http\Controllers\MedicineController::class, 'update']);
+    Route::patch('/medicines/{id}/status', [\App\Http\Controllers\MedicineController::class, 'updateStatus']);
+    Route::delete('/medicines/{id}', [\App\Http\Controllers\MedicineController::class, 'destroy']);
 });

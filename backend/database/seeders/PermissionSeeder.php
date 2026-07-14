@@ -58,6 +58,11 @@ class PermissionSeeder extends Seeder
             'uom.edit',
             'uom.delete',
 
+            'medicine.view',
+            'medicine.create',
+            'medicine.edit',
+            'medicine.delete',
+
             'order.view',
             'order.create',
             'order.edit',

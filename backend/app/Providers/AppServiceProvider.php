@@ -18,6 +18,8 @@ use App\Interfaces\Tax\TaxRepositoryInterface;
 use App\Repositories\Tax\TaxRepository;
 use App\Interfaces\Uom\UomRepositoryInterface;
 use App\Repositories\Uom\UomRepository;
+use App\Interfaces\Medicine\MedicineRepositoryInterface;
+use App\Repositories\Medicine\MedicineRepository;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -59,6 +61,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UomRepositoryInterface::class,
             UomRepository::class
+        );
+        $this->app->bind(
+            MedicineRepositoryInterface::class,
+            MedicineRepository::class
         );
     }
 
