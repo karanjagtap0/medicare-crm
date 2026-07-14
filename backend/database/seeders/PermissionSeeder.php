@@ -63,6 +63,8 @@ class PermissionSeeder extends Seeder
             'medicine.edit',
             'medicine.delete',
 
+            
+
             'order.view',
             'order.create',
             'order.edit',

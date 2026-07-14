@@ -20,6 +20,8 @@ use App\Interfaces\Uom\UomRepositoryInterface;
 use App\Repositories\Uom\UomRepository;
 use App\Interfaces\Medicine\MedicineRepositoryInterface;
 use App\Repositories\Medicine\MedicineRepository;
+use App\Interfaces\Medicine\MedicineBatchRepositoryInterface;
+use App\Repositories\Medicine\MedicineBatchRepository;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -65,6 +67,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             MedicineRepositoryInterface::class,
             MedicineRepository::class
+        );
+        $this->app->bind(
+            MedicineBatchRepositoryInterface::class,
+            MedicineBatchRepository::class
         );
     }
 
