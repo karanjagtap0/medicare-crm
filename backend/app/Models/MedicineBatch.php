@@ -16,6 +16,7 @@ class MedicineBatch extends Model
         'quantity_received',
         'available_quantity',
         'barcode',
+        'barcode_type',
         'status',
         'created_by',
         'updated_by'

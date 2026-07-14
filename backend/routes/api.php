@@ -98,4 +98,20 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::post('/stocks/adjustment', [\App\Http\Controllers\StockController::class, 'adjustment']);
     Route::post('/stocks/transfer', [\App\Http\Controllers\StockController::class, 'transfer']);
     Route::get('/stocks/{medicine}', [\App\Http\Controllers\StockController::class, 'medicineStock']);
+
+    // Barcode Management
+    Route::post('/barcodes/generate', [\App\Http\Controllers\BarcodeController::class, 'generate']);
+    Route::get('/barcodes/search', [\App\Http\Controllers\BarcodeController::class, 'search']);
+    Route::get('/barcodes/{batch}', [\App\Http\Controllers\BarcodeController::class, 'show']);
+    Route::get('/barcodes/{batch}/print', [\App\Http\Controllers\BarcodeController::class, 'print']);
+    Route::get('/barcodes/{batch}/download', [\App\Http\Controllers\BarcodeController::class, 'download']);
+
+    // Medicine Images
+    Route::patch('/medicines/images/reorder', [\App\Http\Controllers\MedicineImageController::class, 'reorder']);
+    Route::get('/medicines/{medicine}/images', [\App\Http\Controllers\MedicineImageController::class, 'index']);
+    Route::post('/medicines/{medicine}/images', [\App\Http\Controllers\MedicineImageController::class, 'store']);
+    Route::get('/medicines/images/{image}', [\App\Http\Controllers\MedicineImageController::class, 'show']);
+    Route::put('/medicines/images/{image}', [\App\Http\Controllers\MedicineImageController::class, 'update']);
+    Route::patch('/medicines/images/{image}/primary', [\App\Http\Controllers\MedicineImageController::class, 'setPrimary']);
+    Route::delete('/medicines/images/{image}', [\App\Http\Controllers\MedicineImageController::class, 'destroy']);
 });

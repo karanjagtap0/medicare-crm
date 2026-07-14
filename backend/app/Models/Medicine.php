@@ -100,4 +100,15 @@ class Medicine extends Model
     {
         return $this->status;
     }
+
+    public function images()
+    {
+        return $this->hasMany(MedicineImage::class);
+    }
+
+    public function primaryImage()
+    {
+        return $this->hasOne(MedicineImage::class)
+            ->where('is_primary', true);
+    }
 }
