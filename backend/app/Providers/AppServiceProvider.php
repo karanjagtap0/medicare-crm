@@ -10,6 +10,8 @@ use App\Interfaces\Dashboard\DashboardRepositoryInterface;
 use App\Repositories\Dashboard\DashboardRepository;
 use App\Interfaces\Category\CategoryRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
+use App\Interfaces\Brand\BrandRepositoryInterface;
+use App\Repositories\Brand\BrandRepository;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CategoryRepositoryInterface::class,
             CategoryRepository::class
+        );
+        $this->app->bind(
+            BrandRepositoryInterface::class,
+            BrandRepository::class
         );
     }
 

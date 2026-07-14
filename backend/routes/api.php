@@ -33,4 +33,12 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::put('/categories/{id}', [\App\Http\Controllers\Master\CategoryController::class, 'update']);
     Route::patch('/categories/{id}/status', [\App\Http\Controllers\Master\CategoryController::class, 'updateStatus']);
     Route::delete('/categories/{id}', [\App\Http\Controllers\Master\CategoryController::class, 'destroy']);
+
+    // Brands
+    Route::get('/brands', [\App\Http\Controllers\Master\BrandController::class, 'index']);
+    Route::post('/brands', [\App\Http\Controllers\Master\BrandController::class, 'store']);
+    Route::get('/brands/{id}', [\App\Http\Controllers\Master\BrandController::class, 'show']);
+    Route::put('/brands/{id}', [\App\Http\Controllers\Master\BrandController::class, 'update']);
+    Route::patch('/brands/{id}/status', [\App\Http\Controllers\Master\BrandController::class, 'updateStatus']);
+    Route::delete('/brands/{id}', [\App\Http\Controllers\Master\BrandController::class, 'destroy']);
 });
