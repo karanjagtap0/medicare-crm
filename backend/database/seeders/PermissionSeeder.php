@@ -43,6 +43,21 @@ class PermissionSeeder extends Seeder
             'brand.edit',
             'brand.delete',
 
+            'supplier.view',
+            'supplier.create',
+            'supplier.edit',
+            'supplier.delete',
+
+            'tax.view',
+            'tax.create',
+            'tax.edit',
+            'tax.delete',
+
+            'uom.view',
+            'uom.create',
+            'uom.edit',
+            'uom.delete',
+
             'order.view',
             'order.create',
             'order.edit',

@@ -41,4 +41,28 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::put('/brands/{id}', [\App\Http\Controllers\Master\BrandController::class, 'update']);
     Route::patch('/brands/{id}/status', [\App\Http\Controllers\Master\BrandController::class, 'updateStatus']);
     Route::delete('/brands/{id}', [\App\Http\Controllers\Master\BrandController::class, 'destroy']);
+
+    // Suppliers
+    Route::get('/suppliers', [\App\Http\Controllers\Master\SupplierController::class, 'index']);
+    Route::post('/suppliers', [\App\Http\Controllers\Master\SupplierController::class, 'store']);
+    Route::get('/suppliers/{id}', [\App\Http\Controllers\Master\SupplierController::class, 'show']);
+    Route::put('/suppliers/{id}', [\App\Http\Controllers\Master\SupplierController::class, 'update']);
+    Route::patch('/suppliers/{id}/status', [\App\Http\Controllers\Master\SupplierController::class, 'updateStatus']);
+    Route::delete('/suppliers/{id}', [\App\Http\Controllers\Master\SupplierController::class, 'destroy']);
+
+    // Taxes
+    Route::get('/taxes', [\App\Http\Controllers\Master\TaxController::class, 'index']);
+    Route::post('/taxes', [\App\Http\Controllers\Master\TaxController::class, 'store']);
+    Route::get('/taxes/{id}', [\App\Http\Controllers\Master\TaxController::class, 'show']);
+    Route::put('/taxes/{id}', [\App\Http\Controllers\Master\TaxController::class, 'update']);
+    Route::patch('/taxes/{id}/status', [\App\Http\Controllers\Master\TaxController::class, 'updateStatus']);
+    Route::delete('/taxes/{id}', [\App\Http\Controllers\Master\TaxController::class, 'destroy']);
+
+    // UOMs
+    Route::get('/uoms', [\App\Http\Controllers\Master\UomController::class, 'index']);
+    Route::post('/uoms', [\App\Http\Controllers\Master\UomController::class, 'store']);
+    Route::get('/uoms/{id}', [\App\Http\Controllers\Master\UomController::class, 'show']);
+    Route::put('/uoms/{id}', [\App\Http\Controllers\Master\UomController::class, 'update']);
+    Route::patch('/uoms/{id}/status', [\App\Http\Controllers\Master\UomController::class, 'updateStatus']);
+    Route::delete('/uoms/{id}', [\App\Http\Controllers\Master\UomController::class, 'destroy']);
 });
