@@ -145,4 +145,12 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::patch('/orders/{id}/cancel', [\App\Http\Controllers\Api\OrderController::class, 'cancel']);
     Route::get('/orders/{id}/timeline', [\App\Http\Controllers\Api\OrderController::class, 'timeline']);
     Route::get('/orders/{id}/invoice', [\App\Http\Controllers\Api\OrderController::class, 'invoice']);
+    Route::get('/orders/{id}/payments', [\App\Http\Controllers\Api\PaymentController::class, 'orderPayments']);
+
+    // Payments
+    Route::get('/payments', [\App\Http\Controllers\Api\PaymentController::class, 'index']);
+    Route::post('/payments', [\App\Http\Controllers\Api\PaymentController::class, 'store']);
+    Route::get('/payments/{id}', [\App\Http\Controllers\Api\PaymentController::class, 'show']);
+    Route::post('/payments/verify', [\App\Http\Controllers\Api\PaymentController::class, 'verify']);
+    Route::post('/payments/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
 });
