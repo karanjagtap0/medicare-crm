@@ -108,6 +108,26 @@ class AppServiceProvider extends ServiceProvider
             InventoryRepositoryInterface::class,
             InventoryRepository::class
         );
+        $this->app->bind(
+            \App\Interfaces\Crm\CustomerNoteRepositoryInterface::class,
+            \App\Repositories\Crm\CustomerNoteRepository::class
+        );
+        $this->app->bind(
+            \App\Interfaces\Crm\CustomerFollowupRepositoryInterface::class,
+            \App\Repositories\Crm\CustomerFollowupRepository::class
+        );
+        $this->app->bind(
+            \App\Interfaces\Crm\SupportTicketRepositoryInterface::class,
+            \App\Repositories\Crm\SupportTicketRepository::class
+        );
+        $this->app->bind(
+            \App\Interfaces\Crm\CustomerCommunicationRepositoryInterface::class,
+            \App\Repositories\Crm\CustomerCommunicationRepository::class
+        );
+        $this->app->bind(
+            \App\Interfaces\Crm\CrmDashboardRepositoryInterface::class,
+            \App\Repositories\Crm\CrmDashboardRepository::class
+        );
     }
 
     /**

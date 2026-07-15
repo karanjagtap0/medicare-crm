@@ -86,6 +86,24 @@ class PermissionSeeder extends Seeder
             'payment.delete',
             'payment.verify',
             'payment.refund',
+
+            'note.view',
+            'note.create',
+            'note.edit',
+            'note.delete',
+
+            'followup.view',
+            'followup.create',
+            'followup.edit',
+            'followup.delete',
+
+            'ticket.view',
+            'ticket.create',
+            'ticket.edit',
+            'ticket.delete',
+
+            'communication.view',
+            'communication.create',
         ];
 
         foreach ($permissions as $permission) {

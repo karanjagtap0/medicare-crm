@@ -47,4 +47,24 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerAddress::class);
     }
+
+    public function notes()
+    {
+        return $this->hasMany(CustomerNote::class);
+    }
+
+    public function followups()
+    {
+        return $this->hasMany(CustomerFollowup::class);
+    }
+
+    public function communications()
+    {
+        return $this->hasMany(CustomerCommunication::class);
+    }
+
+    public function supportTickets()
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
 }
