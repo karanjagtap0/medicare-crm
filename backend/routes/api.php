@@ -153,4 +153,14 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::get('/payments/{id}', [\App\Http\Controllers\Api\PaymentController::class, 'show']);
     Route::post('/payments/verify', [\App\Http\Controllers\Api\PaymentController::class, 'verify']);
     Route::post('/payments/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
+
+    // Inventory
+    Route::get('/inventory/dashboard', [\App\Http\Controllers\Api\InventoryController::class, 'dashboard']);
+    Route::get('/inventory/current-stock', [\App\Http\Controllers\Api\InventoryController::class, 'currentStock']);
+    Route::get('/inventory/ledger', [\App\Http\Controllers\Api\InventoryController::class, 'ledger']);
+    Route::get('/inventory/transactions', [\App\Http\Controllers\Api\InventoryController::class, 'transactions']);
+    Route::post('/inventory/adjustment', [\App\Http\Controllers\Api\InventoryController::class, 'adjustment']);
+    Route::post('/inventory/transfer', [\App\Http\Controllers\Api\InventoryController::class, 'transfer']);
+    Route::post('/inventory/audit', [\App\Http\Controllers\Api\InventoryController::class, 'audit']);
+    Route::get('/inventory/valuation', [\App\Http\Controllers\Api\InventoryController::class, 'valuation']);
 });

@@ -3,54 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\Order\OrderService;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+    public function __construct(private OrderService $orderService)
+    {
+    }
+
     public function index(Request $request)
     {
         if (!$request->user()?->can('order.view')) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $query = Order::with('customer');
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('order_number', 'like', "%{$search}%")
-                  ->orWhere('notes', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('customer_id')) {
-            $query->where('customer_id', $request->customer_id);
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('payment_status')) {
-            $query->where('payment_status', $request->payment_status);
-        }
-
-        if ($request->filled('from_date')) {
-            $query->whereDate('created_at', '>=', $request->from_date);
-        }
-
-        if ($request->filled('to_date')) {
-            $query->whereDate('created_at', '<=', $request->to_date);
-        }
-
-        $orders = $query->orderBy('created_at', 'desc')->paginate($request->per_page ?? 10);
+        $orders = $this->orderService->getOrders($request->all());
 
         return response()->json([
             'success' => true,
@@ -65,39 +35,7 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $data = $request->validated();
-
-        $cart = null;
-        if (!empty($data['cart_id'])) {
-            $cart = Cart::find($data['cart_id']);
-        }
-
-        if ($cart) {
-            $data['sub_total'] = $cart->sub_total ?? 0;
-            $data['discount'] = $cart->discount ?? 0;
-            $data['tax'] = $cart->tax ?? 0;
-            $data['shipping_charge'] = 0;
-            $data['grand_total'] = $cart->grand_total ?? 0;
-        } else {
-            $data['sub_total'] = 0;
-            $data['discount'] = 0;
-            $data['tax'] = 0;
-            $data['shipping_charge'] = 0;
-            $data['grand_total'] = 0;
-        }
-
-        $data['order_number'] = 'ORD-' . strtoupper(Str::random(8));
-        $data['status'] = 'Pending';
-        $data['payment_status'] = 'Pending';
-
-        $order = Order::create($data);
-
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'status' => 'Pending',
-            'remarks' => 'Order created',
-            'created_by' => Auth::id(),
-        ]);
+        $order = $this->orderService->createOrder($request->validated());
 
         return response()->json([
             'success' => true,
@@ -112,7 +50,7 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $order = Order::with(['customer', 'statusHistories.creator'])->findOrFail($id);
+        $order = $this->orderService->getOrder($id);
 
         return response()->json([
             'success' => true,
@@ -127,9 +65,7 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $order = Order::findOrFail($id);
-
-        $order->update($request->validated());
+        $order = $this->orderService->updateOrder($id, $request->validated());
 
         return response()->json([
             'success' => true,
@@ -145,24 +81,11 @@ class OrderController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|string|in:Pending,Confirmed,Packed,Shipped,Delivered,Cancelled',
+            'status' => 'required|string|in:Pending,Processing,Shipped,Delivered,Cancelled,Refunded',
             'remarks' => 'nullable|string'
         ]);
 
-        $order = Order::findOrFail($id);
-
-        if ($order->status === $request->status) {
-            return response()->json(['success' => false, 'message' => 'Order is already in this status'], 400);
-        }
-
-        $order->update(['status' => $request->status]);
-
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'status' => $request->status,
-            'remarks' => $request->remarks,
-            'created_by' => Auth::id(),
-        ]);
+        $order = $this->orderService->updateOrderStatus($id, $request->status, $request->remarks);
 
         return response()->json([
             'success' => true,
@@ -177,24 +100,7 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $request->validate([
-            'remarks' => 'nullable|string'
-        ]);
-
-        $order = Order::findOrFail($id);
-
-        if ($order->status === 'Cancelled') {
-            return response()->json(['success' => false, 'message' => 'Order is already cancelled'], 400);
-        }
-
-        $order->update(['status' => 'Cancelled']);
-
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'status' => 'Cancelled',
-            'remarks' => $request->remarks ?? 'Order cancelled by user',
-            'created_by' => Auth::id(),
-        ]);
+        $order = $this->orderService->cancelOrder($id);
 
         return response()->json([
             'success' => true,
@@ -209,8 +115,7 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $order = Order::findOrFail($id);
-        $timeline = $order->statusHistories()->with('creator')->orderBy('created_at', 'desc')->get();
+        $timeline = $this->orderService->getOrderTimeline($id);
 
         return response()->json([
             'success' => true,
@@ -225,12 +130,21 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $order = Order::with(['customer', 'cart'])->findOrFail($id);
+        $order = $this->orderService->getOrder($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Order invoice retrieved successfully.',
-            'data' => $order,
+            'message' => 'Invoice generated successfully.',
+            'data' => [
+                'invoice_number' => 'INV-' . $order->order_number,
+                'date' => $order->created_at->format('Y-m-d'),
+                'customer' => $order->customer,
+                'items' => $order->cart->items,
+                'sub_total' => $order->sub_total,
+                'discount' => $order->discount,
+                'tax' => $order->tax,
+                'grand_total' => $order->grand_total,
+            ]
         ], 200);
     }
 }

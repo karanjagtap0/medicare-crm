@@ -22,6 +22,18 @@ use App\Interfaces\Medicine\MedicineRepositoryInterface;
 use App\Repositories\Medicine\MedicineRepository;
 use App\Interfaces\Medicine\MedicineBatchRepositoryInterface;
 use App\Repositories\Medicine\MedicineBatchRepository;
+use App\Interfaces\Customer\CustomerRepositoryInterface;
+use App\Repositories\Customer\CustomerRepository;
+use App\Interfaces\Customer\CustomerAddressRepositoryInterface;
+use App\Repositories\Customer\CustomerAddressRepository;
+use App\Interfaces\Cart\CartRepositoryInterface;
+use App\Repositories\Cart\CartRepository;
+use App\Interfaces\Order\OrderRepositoryInterface;
+use App\Repositories\Order\OrderRepository;
+use App\Interfaces\Payment\PaymentRepositoryInterface;
+use App\Repositories\Payment\PaymentRepository;
+use App\Interfaces\Inventory\InventoryRepositoryInterface;
+use App\Repositories\Inventory\InventoryRepository;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -71,6 +83,30 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             MedicineBatchRepositoryInterface::class,
             MedicineBatchRepository::class
+        );
+        $this->app->bind(
+            CustomerRepositoryInterface::class,
+            CustomerRepository::class
+        );
+        $this->app->bind(
+            CustomerAddressRepositoryInterface::class,
+            CustomerAddressRepository::class
+        );
+        $this->app->bind(
+            CartRepositoryInterface::class,
+            CartRepository::class
+        );
+        $this->app->bind(
+            OrderRepositoryInterface::class,
+            OrderRepository::class
+        );
+        $this->app->bind(
+            PaymentRepositoryInterface::class,
+            PaymentRepository::class
+        );
+        $this->app->bind(
+            InventoryRepositoryInterface::class,
+            InventoryRepository::class
         );
     }
 

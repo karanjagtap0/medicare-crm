@@ -74,6 +74,12 @@ class PermissionSeeder extends Seeder
             'order.delete',
             'order.cancel',
 
+            'inventory.view',
+            'inventory.adjust',
+            'inventory.transfer',
+            'inventory.audit',
+            'inventory.valuation',
+
             'payment.view',
             'payment.create',
             'payment.edit',
