@@ -3,22 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\CustomerAddress;
+use App\Services\Customer\CustomerAddressService;
 use App\Http\Requests\StoreCustomerAddressRequest;
 use App\Http\Requests\UpdateCustomerAddressRequest;
 use Illuminate\Http\Request;
 
 class CustomerAddressController extends Controller
 {
+    public function __construct(private CustomerAddressService $addressService)
+    {
+    }
+
     public function index(Request $request, $id)
     {
         if (!$request->user()?->can('customer.view')) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $customer = Customer::findOrFail($id);
-        $addresses = $customer->addresses()->get();
+        $addresses = $this->addressService->getCustomerAddresses($id);
 
         return response()->json([
             'success' => true,
@@ -33,15 +35,7 @@ class CustomerAddressController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $customer = Customer::findOrFail($id);
-        
-        $data = $request->validated();
-        
-        if (isset($data['is_default']) && $data['is_default']) {
-            $customer->addresses()->update(['is_default' => false]);
-        }
-
-        $address = $customer->addresses()->create($data);
+        $address = $this->addressService->createCustomerAddress($id, $request->validated());
 
         return response()->json([
             'success' => true,
@@ -56,17 +50,7 @@ class CustomerAddressController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $address = CustomerAddress::findOrFail($id);
-        
-        $data = $request->validated();
-        
-        if (isset($data['is_default']) && $data['is_default']) {
-            CustomerAddress::where('customer_id', $address->customer_id)
-                ->where('id', '!=', $address->id)
-                ->update(['is_default' => false]);
-        }
-
-        $address->update($data);
+        $address = $this->addressService->updateCustomerAddress($id, $request->validated());
 
         return response()->json([
             'success' => true,
@@ -81,8 +65,7 @@ class CustomerAddressController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $address = CustomerAddress::findOrFail($id);
-        $address->delete();
+        $this->addressService->deleteCustomerAddress($id);
 
         return response()->json([
             'success' => true,

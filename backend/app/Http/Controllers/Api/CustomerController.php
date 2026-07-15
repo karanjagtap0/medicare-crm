@@ -3,26 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Services\Customer\CustomerService;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
+    public function __construct(private CustomerService $customerService)
+    {
+    }
+
     public function index(Request $request)
     {
         if (!$request->user()?->can('customer.view')) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $customers = Customer::query();
+        $customers = $this->customerService->getCustomers($request->all());
 
         return response()->json([
             'success' => true,
             'message' => 'Customers retrieved successfully.',
-            'data' => $customers->paginate($request->per_page ?? 10),
+            'data' => $customers,
         ], 200);
     }
 
@@ -32,11 +35,7 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $data = $request->validated();
-        $data['created_by'] = Auth::id();
-        $data['updated_by'] = Auth::id();
-
-        $customer = Customer::create($data);
+        $customer = $this->customerService->createCustomer($request->validated());
 
         return response()->json([
             'success' => true,
@@ -51,7 +50,7 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $customer = Customer::findOrFail($id);
+        $customer = $this->customerService->getCustomer($id);
 
         return response()->json([
             'success' => true,
@@ -66,12 +65,7 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $customer = Customer::findOrFail($id);
-        
-        $data = $request->validated();
-        $data['updated_by'] = Auth::id();
-        
-        $customer->update($data);
+        $customer = $this->customerService->updateCustomer($id, $request->validated());
 
         return response()->json([
             'success' => true,
@@ -88,11 +82,7 @@ class CustomerController extends Controller
 
         $request->validate(['status' => 'required|boolean']);
         
-        $customer = Customer::findOrFail($id);
-        $customer->update([
-            'status' => $request->status,
-            'updated_by' => Auth::id(),
-        ]);
+        $customer = $this->customerService->updateStatus($id, $request->status);
 
         return response()->json([
             'success' => true,
@@ -107,8 +97,7 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
-        $customer = Customer::findOrFail($id);
-        $customer->delete();
+        $this->customerService->deleteCustomer($id);
 
         return response()->json([
             'success' => true,

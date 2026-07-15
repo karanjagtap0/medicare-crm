@@ -135,4 +135,65 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::delete('/cart/items/{id}', [\App\Http\Controllers\Api\CartController::class, 'destroy']);
     Route::delete('/cart', [\App\Http\Controllers\Api\CartController::class, 'clear']);
     Route::get('/cart/summary', [\App\Http\Controllers\Api\CartController::class, 'summary']);
+
+    // Orders
+    Route::get('/orders', [\App\Http\Controllers\Api\OrderController::class, 'index']);
+    Route::post('/orders', [\App\Http\Controllers\Api\OrderController::class, 'store']);
+    Route::get('/orders/{id}', [\App\Http\Controllers\Api\OrderController::class, 'show']);
+    Route::put('/orders/{id}', [\App\Http\Controllers\Api\OrderController::class, 'update']);
+    Route::patch('/orders/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'updateStatus']);
+    Route::patch('/orders/{id}/cancel', [\App\Http\Controllers\Api\OrderController::class, 'cancel']);
+    Route::get('/orders/{id}/timeline', [\App\Http\Controllers\Api\OrderController::class, 'timeline']);
+    Route::get('/orders/{id}/invoice', [\App\Http\Controllers\Api\OrderController::class, 'invoice']);
+    Route::get('/orders/{id}/payments', [\App\Http\Controllers\Api\PaymentController::class, 'orderPayments']);
+
+    // Payments
+    Route::get('/payments', [\App\Http\Controllers\Api\PaymentController::class, 'index']);
+    Route::post('/payments', [\App\Http\Controllers\Api\PaymentController::class, 'store']);
+    Route::get('/payments/{id}', [\App\Http\Controllers\Api\PaymentController::class, 'show']);
+    Route::post('/payments/verify', [\App\Http\Controllers\Api\PaymentController::class, 'verify']);
+    Route::post('/payments/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
+
+    // Inventory
+    Route::get('/inventory/dashboard', [\App\Http\Controllers\Api\InventoryController::class, 'dashboard']);
+    Route::get('/inventory/current-stock', [\App\Http\Controllers\Api\InventoryController::class, 'currentStock']);
+    Route::get('/inventory/ledger', [\App\Http\Controllers\Api\InventoryController::class, 'ledger']);
+    Route::get('/inventory/transactions', [\App\Http\Controllers\Api\InventoryController::class, 'transactions']);
+    Route::post('/inventory/adjustment', [\App\Http\Controllers\Api\InventoryController::class, 'adjustment']);
+    Route::post('/inventory/transfer', [\App\Http\Controllers\Api\InventoryController::class, 'transfer']);
+    Route::post('/inventory/audit', [\App\Http\Controllers\Api\InventoryController::class, 'audit']);
+    Route::get('/inventory/valuation', [\App\Http\Controllers\Api\InventoryController::class, 'valuation']);
+
+    // CRM
+    Route::prefix('crm')->group(function () {
+        // Customer Profile
+        Route::get('/customers/{id}', [\App\Http\Controllers\Api\Crm\CustomerProfileController::class, 'show']);
+        Route::get('/customers/{id}/purchase-history', [\App\Http\Controllers\Api\Crm\CustomerProfileController::class, 'purchaseHistory']);
+
+        // Customer Notes
+        Route::get('/customers/{id}/notes', [\App\Http\Controllers\Api\Crm\CustomerNoteController::class, 'index']);
+        Route::post('/customers/{id}/notes', [\App\Http\Controllers\Api\Crm\CustomerNoteController::class, 'store']);
+        Route::put('/notes/{id}', [\App\Http\Controllers\Api\Crm\CustomerNoteController::class, 'update']);
+        Route::delete('/notes/{id}', [\App\Http\Controllers\Api\Crm\CustomerNoteController::class, 'destroy']);
+
+        // Follow-ups
+        Route::get('/followups', [\App\Http\Controllers\Api\Crm\CustomerFollowupController::class, 'index']);
+        Route::post('/followups', [\App\Http\Controllers\Api\Crm\CustomerFollowupController::class, 'store']);
+        Route::put('/followups/{id}', [\App\Http\Controllers\Api\Crm\CustomerFollowupController::class, 'update']);
+        Route::delete('/followups/{id}', [\App\Http\Controllers\Api\Crm\CustomerFollowupController::class, 'destroy']);
+
+        // Support Tickets
+        Route::get('/tickets', [\App\Http\Controllers\Api\Crm\SupportTicketController::class, 'index']);
+        Route::post('/tickets', [\App\Http\Controllers\Api\Crm\SupportTicketController::class, 'store']);
+        Route::get('/tickets/{id}', [\App\Http\Controllers\Api\Crm\SupportTicketController::class, 'show']);
+        Route::patch('/tickets/{id}/status', [\App\Http\Controllers\Api\Crm\SupportTicketController::class, 'updateStatus']);
+        Route::post('/tickets/{id}/reply', [\App\Http\Controllers\Api\Crm\SupportTicketController::class, 'reply']);
+
+        // Communications
+        Route::get('/communications', [\App\Http\Controllers\Api\Crm\CustomerCommunicationController::class, 'index']);
+        Route::post('/communications', [\App\Http\Controllers\Api\Crm\CustomerCommunicationController::class, 'store']);
+
+        // CRM Dashboard
+        Route::get('/dashboard', [\App\Http\Controllers\Api\Crm\CrmDashboardController::class, 'dashboard']);
+    });
 });
