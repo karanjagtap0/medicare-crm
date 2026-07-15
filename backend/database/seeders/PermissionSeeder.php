@@ -63,13 +63,16 @@ class PermissionSeeder extends Seeder
             'medicine.edit',
             'medicine.delete',
 
-            
+            'customer.view',
+            'customer.create',
+            'customer.edit',
+            'customer.delete',
 
             'order.view',
             'order.create',
             'order.edit',
             'order.delete',
-
+            'order.cancel',
         ];
 
         foreach ($permissions as $permission) {

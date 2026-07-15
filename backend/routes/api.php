@@ -135,4 +135,14 @@ Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
     Route::delete('/cart/items/{id}', [\App\Http\Controllers\Api\CartController::class, 'destroy']);
     Route::delete('/cart', [\App\Http\Controllers\Api\CartController::class, 'clear']);
     Route::get('/cart/summary', [\App\Http\Controllers\Api\CartController::class, 'summary']);
+
+    // Orders
+    Route::get('/orders', [\App\Http\Controllers\Api\OrderController::class, 'index']);
+    Route::post('/orders', [\App\Http\Controllers\Api\OrderController::class, 'store']);
+    Route::get('/orders/{id}', [\App\Http\Controllers\Api\OrderController::class, 'show']);
+    Route::put('/orders/{id}', [\App\Http\Controllers\Api\OrderController::class, 'update']);
+    Route::patch('/orders/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'updateStatus']);
+    Route::patch('/orders/{id}/cancel', [\App\Http\Controllers\Api\OrderController::class, 'cancel']);
+    Route::get('/orders/{id}/timeline', [\App\Http\Controllers\Api\OrderController::class, 'timeline']);
+    Route::get('/orders/{id}/invoice', [\App\Http\Controllers\Api\OrderController::class, 'invoice']);
 });
